@@ -7,7 +7,7 @@ import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import BenefitSection from "@/components/BenefitSection";
 import AccessSection from "@/components/AccessSection";
-import CTASection from "@/components/CTASection";
+// import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
@@ -25,7 +25,7 @@ const Index = () => {
       <FAQ />
       <BenefitSection />
       <AccessSection />
-      <CTASection />
+      {/* <CTASection /> */}
       <Footer />
     </div>
   );
