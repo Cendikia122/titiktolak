@@ -11,7 +11,7 @@ import AccessSection from "@/components/AccessSection";
 import LoadingScreen from "@/components/LoadingScreen";
 import Footer from "@/components/Footer";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -20,6 +20,20 @@ const Index = () => {
   const handleLoadingFinish = () => {
     setIsLoading(false);
   };
+
+  const kirimData = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/api/data");
+      const data = await res.text();
+      console.log("Response dari Golang:", data);
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  };
+
+  useEffect(() => {
+    kirimData();
+  }, []);
 
   if (isLoading) {
     return <LoadingScreen onFinish={handleLoadingFinish} />;
