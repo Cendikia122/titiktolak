@@ -144,6 +144,102 @@
     animation: slideIn 0.4s ease-out both;
   }
 
+  .not-found-scene {
+    background:
+      radial-gradient(circle at top left, hsl(var(--secondary) / 0.9), transparent 32%),
+      radial-gradient(circle at 85% 20%, hsl(var(--accent) / 0.55), transparent 28%),
+      linear-gradient(135deg, #f7fbff 0%, #eef7ff 45%, #fff7ef 100%);
+  }
+
+  .not-found-grid {
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.55) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.55) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(circle at center, black 40%, transparent 95%);
+  }
+
+  .not-found-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(10px);
+    opacity: 0.75;
+    animation: floatOrb 10s ease-in-out infinite;
+  }
+
+  .not-found-orb-a {
+    top: 12%;
+    left: 6%;
+    width: 14rem;
+    height: 14rem;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(125, 211, 252, 0.65) 45%, rgba(125, 211, 252, 0) 72%);
+  }
+
+  .not-found-orb-b {
+    right: 10%;
+    bottom: 14%;
+    width: 20rem;
+    height: 20rem;
+    background: radial-gradient(circle, rgba(254, 240, 138, 0.65) 0%, rgba(253, 186, 116, 0.32) 45%, rgba(253, 186, 116, 0) 72%);
+    animation-delay: -3s;
+  }
+
+  .not-found-orb-c {
+    top: 45%;
+    right: 34%;
+    width: 9rem;
+    height: 9rem;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(192, 132, 252, 0.3) 45%, rgba(192, 132, 252, 0) 72%);
+    animation-delay: -6s;
+  }
+
+  .not-found-code span {
+    display: inline-block;
+    animation: hoverDigit 3.6s ease-in-out infinite;
+  }
+
+  .not-found-code span:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+
+  .not-found-code span:nth-child(3) {
+    animation-delay: 0.6s;
+  }
+
+  .not-found-zero {
+    position: relative;
+    color: transparent;
+    -webkit-text-stroke: 2px hsl(var(--foreground));
+    text-stroke: 2px hsl(var(--foreground));
+  }
+
+  .not-found-zero::before {
+    content: "";
+    position: absolute;
+    inset: 18% 20%;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--accent)));
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.65);
+    animation: pulseCore 2.8s ease-in-out infinite;
+  }
+
+  .not-found-panel {
+    animation: panelRise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .not-found-card {
+    animation: cardFloatIn 0.7s ease-out both;
+  }
+
+  .not-found-radar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    border: 1px solid hsl(var(--secondary-foreground) / 0.15);
+    animation: radarPing 2.4s ease-out infinite;
+  }
+
   @keyframes slideIn {
     from {
       opacity: 0;
@@ -152,6 +248,68 @@
     to {
       opacity: 1;
       transform: translateX(0);
+    }
+  }
+
+  @keyframes floatOrb {
+    0%, 100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(0, -18px, 0) scale(1.06);
+    }
+  }
+
+  @keyframes hoverDigit {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(-2deg);
+    }
+  }
+
+  @keyframes pulseCore {
+    0%, 100% {
+      transform: scale(0.92);
+      opacity: 0.85;
+    }
+    50% {
+      transform: scale(1.08);
+      opacity: 1;
+    }
+  }
+
+  @keyframes panelRise {
+    from {
+      opacity: 0;
+      transform: translateY(28px) rotate(1deg);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) rotate(0deg);
+    }
+  }
+
+  @keyframes cardFloatIn {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes radarPing {
+    0% {
+      transform: scale(0.85);
+      opacity: 0.75;
+    }
+    100% {
+      transform: scale(1.7);
+      opacity: 0;
     }
   }
 }
