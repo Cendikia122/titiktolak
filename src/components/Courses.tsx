@@ -32,7 +32,7 @@ const Courses = () => {
 
         <CategoryFilter categories={categories} active={active} onSelect={setActive} />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-children">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 stagger-children visible">
           {filtered.map((course) => (
             <CourseCard key={course.title} {...course} />
           ))}
