@@ -1,5 +1,20 @@
 import { useEffect, useRef, useCallback } from "react";
 
+const ANIMATED_SELECTOR =
+  ".scroll-fade, .scroll-fade-left, .scroll-fade-right, .scroll-scale, .stagger-children";
+
+function revealVisibleElements(elements: Element[]) {
+  elements.forEach((el) => {
+    const rect = el.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    const isVisible = rect.top < viewportHeight * 0.9 && rect.bottom > 0;
+
+    if (isVisible) {
+      el.classList.add("visible");
+    }
+  });
+}
+
 export function useScrollAnimation() {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -7,10 +22,17 @@ export function useScrollAnimation() {
     const root = ref.current;
     if (!root) return null;
 
-    const elements = root.querySelectorAll(
-      ".scroll-fade, .scroll-fade-left, .scroll-fade-right, .scroll-scale, .stagger-children"
-    );
+    const elements = Array.from(root.querySelectorAll(ANIMATED_SELECTOR));
+    if (elements.length === 0) return null;
 
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      elements.forEach((el) => el.classList.add("visible"));
+      return null;
+    }
+
+    revealVisibleElements(elements);
     root.classList.add("scroll-animate-ready");
 
     if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
@@ -31,12 +53,18 @@ export function useScrollAnimation() {
 
     elements.forEach((el) => observer.observe(el));
 
-    // Fallback: never leave content hidden if the observer does not fire.
-    window.setTimeout(() => {
-      elements.forEach((el) => el.classList.add("visible"));
-    }, 600);
+    const handleViewportChange = () => revealVisibleElements(elements);
 
-    return observer;
+    window.addEventListener("scroll", handleViewportChange, { passive: true });
+    window.addEventListener("resize", handleViewportChange);
+
+    return {
+      disconnect: () => {
+        observer.disconnect();
+        window.removeEventListener("scroll", handleViewportChange);
+        window.removeEventListener("resize", handleViewportChange);
+      },
+    };
   }, []);
 
   useEffect(() => {

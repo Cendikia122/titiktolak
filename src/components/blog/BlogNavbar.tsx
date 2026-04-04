@@ -1,19 +1,24 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Search } from "lucide-react";
+import { categories, toCategoryParam } from "@/data/blogData";
 
 const blogNavLinks = [
   { label: "Home", href: "/" },
-  { label: "Tutorial", href: "/blog?cat=tutorial" },
-  { label: "Digital Marketing", href: "/blog?cat=digital-marketing" },
-  { label: "Web Development", href: "/blog?cat=web-development" },
-  { label: "News & Update", href: "/blog?cat=news" },
-  { label: "Journal", href: "/blog?cat=journal" },
+  ...categories
+    .filter((category) => category !== "Tutorial")
+    .map((category) => ({
+      label: category,
+      href: `/blog?cat=${toCategoryParam(category)}`,
+      category,
+    })),
 ];
 
 const BlogNavbar = () => {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const location = useLocation();
+  const activeCategory = useMemo(() => new URLSearchParams(location.search).get("cat"), [location.search]);
 
   return (
     <nav className="sticky top-0 z-50 bg-card/90 backdrop-blur-md shadow-sm border-b border-border">
@@ -31,7 +36,13 @@ const BlogNavbar = () => {
             <li key={link.label}>
               <Link
                 to={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                className={`text-sm font-medium transition-colors ${
+                  link.href === "/"
+                    ? location.pathname === "/" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                    : location.pathname.startsWith("/blog") && activeCategory === toCategoryParam(link.category || "")
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                }`}
               >
                 {link.label}
               </Link>
@@ -77,7 +88,13 @@ const BlogNavbar = () => {
               <li key={link.label}>
                 <Link
                   to={link.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  className={`text-sm font-medium transition-colors ${
+                    link.href === "/"
+                      ? location.pathname === "/" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                      : location.pathname.startsWith("/blog") && activeCategory === toCategoryParam(link.category || "")
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                  }`}
                   onClick={() => setOpen(false)}
                 >
                   {link.label}

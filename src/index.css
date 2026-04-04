@@ -56,9 +56,17 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
+}
+
+.prose h2[id] {
+  scroll-margin-top: 6rem;
 }
 
 @layer utilities {

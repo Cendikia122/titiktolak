@@ -706,6 +706,14 @@ export const articles: Article[] = [
 
 export const categories = ["Digital Marketing", "Artificial Intelligence", "Web Development", "Programming", "Tutorial"];
 
+export function toCategoryParam(category: string): string {
+  return category.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+export function getCategoryByParam(param: string): string | undefined {
+  return categories.find((category) => toCategoryParam(category) === param);
+}
+
 export function getArticlesByCategory(category: string): Article[] {
   return articles.filter(a => a.category === category);
 }

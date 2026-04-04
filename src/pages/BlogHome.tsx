@@ -8,15 +8,19 @@ import CategorySection from "@/components/blog/CategorySection";
 import Sidebar from "@/components/blog/Sidebar";
 import ArticleCard from "@/components/blog/ArticleCard";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { searchArticles, articles } from "@/data/blogData";
+import { searchArticles, articles, getArticlesByCategory, getCategoryByParam } from "@/data/blogData";
 import { Search, X } from "lucide-react";
 
 const BlogHome = () => {
   const scrollRef = useScrollAnimation();
+  const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
 
+  const activeCategoryParam = searchParams.get("cat");
+  const activeCategory = activeCategoryParam ? getCategoryByParam(activeCategoryParam) : undefined;
   const searchResults = searchQuery.length >= 2 ? searchArticles(searchQuery) : [];
+  const categoryResults = activeCategory ? getArticlesByCategory(activeCategory) : [];
 
   return (
     <div className="min-h-screen bg-background" ref={scrollRef}>
@@ -70,6 +74,23 @@ const BlogHome = () => {
             ) : (
               <div className="text-center py-16">
                 <p className="text-muted-foreground">Tidak ada artikel ditemukan. Coba kata kunci lain.</p>
+              </div>
+            )}
+          </div>
+        ) : activeCategory ? (
+          <div>
+            <h2 className="text-lg font-bold text-foreground mb-6">
+              Kategori: <span className="text-primary">{activeCategory}</span> ({categoryResults.length} artikel)
+            </h2>
+            {categoryResults.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                {categoryResults.map((article) => (
+                  <ArticleCard key={article.id} article={article} variant="medium" />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16">
+                <p className="text-muted-foreground">Belum ada artikel untuk kategori ini.</p>
               </div>
             )}
           </div>

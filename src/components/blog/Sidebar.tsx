@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { articles, categories, getArticlesByCategory } from "@/data/blogData";
+import { articles, categories, getArticlesByCategory, toCategoryParam } from "@/data/blogData";
 import ArticleCard from "./ArticleCard";
 import { Mail } from "lucide-react";
 
@@ -10,6 +10,19 @@ interface SidebarProps {
 const Sidebar = ({ tocItems }: SidebarProps) => {
   const popular = articles.slice(0, 5);
   const latest = [...articles].sort((a, b) => b.id - a.id).slice(0, 5);
+
+  const handleTocClick = (id: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
+    const element = document.getElementById(id);
+    if (!element) return;
+
+    const navbarOffset = 96;
+    const top = element.getBoundingClientRect().top + window.scrollY - navbarOffset;
+
+    window.history.replaceState(null, "", `#${id}`);
+    window.scrollTo({ top, behavior: "smooth" });
+  };
 
   return (
     <aside className="space-y-6">
@@ -24,6 +37,7 @@ const Sidebar = ({ tocItems }: SidebarProps) => {
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
+                  onClick={handleTocClick(item.id)}
                   className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1 pl-3 border-l-2 border-border hover:border-primary"
                 >
                   {item.text}
@@ -52,7 +66,7 @@ const Sidebar = ({ tocItems }: SidebarProps) => {
             return (
               <li key={cat}>
                 <Link
-                  to={`/blog?cat=${encodeURIComponent(cat)}`}
+                  to={`/blog?cat=${toCategoryParam(cat)}`}
                   className="flex items-center justify-between text-sm text-muted-foreground hover:text-foreground transition-colors py-1.5"
                 >
                   <span className="flex items-center gap-2">
